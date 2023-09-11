@@ -9,49 +9,18 @@
     <script src="../js/vue.js"></script>
 </head>
 <body>
-    <div id="app">
-        <div>
-            <h1>{{msg}}</h1>
-            <h1>{{name}}</h1>
-        </div>
-    </div>
+    <div id="app"></div>
 
     <script>
-        // Vue.config是Vue的全局配置对象
-        // productionTip属性可以设置是否生成生产提示信息
-        // 默认是true，设置为false后，不会生成生产提示信息
-        // Vue.config.productionTip = false; 
-        // 有时候会没有效果，需要修改vue.js文件，不过不建议关闭提示
-
         /* 
-        关于template配置项：
-            1.template指定的是模板语句，但模板语句只能有一个根节点
-            2.只要data中的数据发生变化，模板语句就会重新渲染
-            3.如果使用template，指定挂载位置的元素会被替换
-            4.好消息：模板语句可以直接写到html标签中，Vue框架可以直接找到编译并渲染
-            5.如果直接将模板语句编写到HTML标签中，那么指定挂载位置就不会被替换了
-        关于$mount()：
-            在Vue中可以不使用$mount()进行挂载，在Vue中有一个配置项el
-            el配置项可以达到和$mount()同样的效果
+            
         */
         new Vue({
-            // 错误写法，template只能指定一个根节点
-            // template: '<h1>{{msg}}</h1><h1>{{name}}</h1>',
-            /* template: `
-            <div>
-                <h1>{{msg}}</h1>
-                <h1>{{name}}</h1>
-            </div>
-            `, */
+            template: '<h1>{{msg}}</h1><h1>{{msg}}</h1>',
             data: {
-                msg: 'Hello Vue!!!',
-                name: 'woai老杜'
+                msg: '老杜',
             },
-            // el其实是element元素
-            el: '#app',
-            // el: document.getElementById('app'),
-        // }).$mount('#app');
-        });
+        }).$mount('#app');
     </script>
 </body>
 </html>
