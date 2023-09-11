@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模板语句的数据来源</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        /* 
+        模板语句的数据来源：data选项
+            1.data选项是Vue实例的数据对象，data实际上是为整个Vue实例提供数据来源的
+            2.data选项的类型：Object | Function（对象和函数）
+            3.如果data是Object对象的话，对象必须是纯粹的对象（含有零个或多个key-value对）
+            4.data数据通过{{}}插入到模板语句中，这种语法被称为插值语法（胡子语法）
+                注意：插值语法中的{{双大括号必须连在一起，不能分开}}
+         */
+        new Vue({
+            template: `<h1>最近很火的电视剧{{name}}，上映日期：{{releaseTime}}。
+                主角是{{lead.name}}，年龄{{lead.age}}岁。
+                其他演员包括：{{actors[0].name}}({{actors[0].age}}岁)、
+                {{actors[1].name}}({{actors[1].age}}岁)。
+                </h1>`,
+            data: {
+                name: '狂飙',
+                releaseTime: '2023年08月08日',
+                lead: {
+                    name: '高启强',
+                    age: 38,
+                },
+                actors: [
+                    {
+                        name: '安欣',
+                        age: 35
+                    },
+                    {
+                        name: '高启兰',
+                        age: 20
+                    }
+                ]
+            },
+        }).$mount('#app');
+    </script>
+</body>
+</html>
