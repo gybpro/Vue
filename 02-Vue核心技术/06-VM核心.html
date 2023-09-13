@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VM核心</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        通过Vue实例可以访问很多属性：
+            以 $ 开始的属性，可以看作公开的属性，这些属性是供程序员使用的
+            以 _ 开始的属性，可以看作私有的属性，这些属性是Vue底层使用，Vue不推荐使用，一般程序员也很少使用
+            通过vm也可以访问Vue实例对象上的属性，如：vm.$delete...
+     -->
+    <div id="app">
+        <input v-model="msg" />
+    </div>
+
+    <script>
+        let dataObj = {
+            msg: 'Hello Vue!',
+        };
+
+        const vm = new Vue({
+            el: '#app',
+            data: dataObj,
+        });
+
+        // vm访问msg属性是通过数据代理机制，要学数据代理机制，要先学：Object.defineProperty()
+        console.log('vm访问msg', vm.msg);
+    </script>
+</body>
+</html>
