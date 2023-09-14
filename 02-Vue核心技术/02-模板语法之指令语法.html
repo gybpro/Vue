@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模板语法之指令语法</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        指令语法：
+            1.
+            2.Vue框架中所有指令都以"v-"开始
+            3.插值是写在标签体中的，指令则是以标签属性的形式存在的
+                如：<span v-on:click="sayHello()"></span>
+                注意：虽然指令是写在标签属性上的，但这是Vue的语法，
+                浏览器是无法直接读取的，要Vue编译后浏览器才能读
+            4.指令语法规则：
+                完整语法格式：<HTML标签 v-指令名:参数="表达式"></HTML标签>
+                这里的表达式可填写内容，其实和插值语法{{}}中可填写内容是一样的
+                但需要注意的是指令语法表达式中不能使用插值语法{{}}
+                不是所有的指令都有参数和表达式，例如v-once，既不需要参数，也不需要表达式
+            5.v-once指令：
+                作用：只渲染元素一次，随后的渲染，元素及其子节点将被是为静态内容跳过。可以用于性能优化。
+            6.v-if="表达式"指令：
+                作用：根据条件判断是否渲染元素，true则渲染，false则不渲染
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h1 v-once>{{msg}}</h1>
+        <h1 v-if="a > b">{{msg}}</h1>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                msg: "Hello Vue!",
+                a: 10,
+                b: 10,
+            }
+        });
+    </script>
+</body>
+</html>
