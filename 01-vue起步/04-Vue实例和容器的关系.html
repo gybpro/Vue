@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue实例和容器的关系</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div class="app">
+        <h1>{{msg}}</h1>
+    </div>
+    <div class="app">
+        <h1>{{msg}}</h1>
+    </div>
+
+    <div id="app">
+        <h1>{{msg}}</h1>
+    </div>
+
+    <script>
+        /* 
+        Vue实例和容器的关系是一对一的(一夫一妻制)
+        一个Vue实例只能接管一个容器，一旦接管到容器，即使后面有相同的容器，Vue也是不会管的(Vue已经娶到媳妇了)
+         */
+        new Vue({
+            el: '.app',
+            data: {
+                msg: 'Hello Vue!',
+            }
+        });
+
+        new Vue({
+            el: '#app',
+            data: {
+                msg: 'zhangsan',
+            }
+        });
+
+        // 这个Vue实例想去接管id=app的容器，但是已经有Vue实例接管了(被娶了)，他失效了(打光棍)
+        new Vue({
+            el: '#app',
+            data: {
+                msg: 'jackson',
+            }
+        });
+    </script>
+</body>
+</html>
