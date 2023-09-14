@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写Vue框架数据代理实现</title>
+
+    <script src="../js/myvue.js"></script>
+</head>
+<body>
+    <!-- 
+        1.Vue实例不会给属性名以_和$开头的属性做数据代理
+        2.Vue的属性函数以_和$开头，不允许程序员data中属性名以_和$开头，这样是为了避免冲突，防止Vue底层源码被覆盖
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h2>{{name}}</h2>
+        <h3>{{age}}</h3>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue!',
+                name: 'zhangsan',
+                _name: 'zhangsan',
+                age: 20,
+                $age: 20,
+            },
+        });
+    </script>
+</body>
+</html>
