@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object.defineProperty()</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        Object.defineProperty()：
+        1.这个方法是ES5新增的
+        2.作用：给对象新增属性，或设置对象原有属性
+        3.使用：Object.defineProperty(对象, '属性名', {配置项key:value对）});
+        4.可使用配置项：
+            1.value：给属性赋值
+            2.writable：设置该属性是否可以被修改
+            3.getter：不需要手动调用，当读取属性值的时候自动调用
+                getter方法的返回值非常重要，这个返回值就代表属性的值
+            4.setter：不需要手动调用，当设置属性值的时候自动调用
+                setter方法上是有一个参数的，这个参数可以接受传过来的值
+            注意：当配置项中有setter和getter时，value和writable配置项都不能存在！
+     -->
+    <div id="app">
+        <input v-model="msg" />
+    </div>
+
+    <script>
+        // 创建一个普通对象
+        let phone = {};
+
+        // 临时变量
+        let temp;
+
+        Object.defineProperty(phone, 'color', {
+            // value: '太空灰',
+            // writable: true,
+            get: function() {
+                console.log('getter方法执行了');
+                // 这里这样调用的话，就会变成递归了
+                // return this.color;
+                return temp;
+            },
+            set: function(val) {
+                console.log('setter方法执行了', val);
+                // 这里这样调用的话，就会变成递归了
+                // this.color = val;
+                temp = val;
+            },
+        });
+    </script>
+</body>
+</html>

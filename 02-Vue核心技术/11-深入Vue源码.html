@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深入Vue源码</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        Vue框架源码中的关键性代码：
+        1. var data = vm.$options.data;
+            注意：这是获取data，程序执行到这里，vm上还没有_data属性
+        2. data = vm._data = isFunction(data) ? getData(data, vm) : data || {};
+            程序执行完这行代码之后，vm对象就多了_data属性
+            通过以上源码可以得知data不一定是一个{}对象，也可以是一个函数
+            代码含义：
+                如果data是函数，则调用getData(data, vm)来获取data，返回getData方法返回值
+                如果data不是函数，则直接返回data
+                返回值同时赋值给data和_data属性
+            程序执行到这里，为vm扩展了一个_data属性：
+                _data属性，是以_开始的，足以说明，这个属性是Vue框架底层访问的
+                _data是直接指向最真实的data对象的：
+                    {
+                        name: 'zhangsan',
+                        age: 20,
+                    }
+                通过_data访问的name和age是不会走数据代理机制的，是不会走getter和setter方法的
+                可以在vue.js的源码sharedPropertyDefinition.get()方法中添加log输出验证
+
+            注意：对于Vue实例vm来说，不仅有_data属性，还有$data属性
+                    _data是框架底层使用，可以看做私有的
+                    $data是给程序员使用，可以看做公共的
+
+        3. 重点函数：
+            function isReserved(str) {
+                var c = (str + '').charCodeAt(0);
+                return c === 0x24 || c === 0x5f;
+            }
+            这个函数是用来判断字符串是否以_和$开始的
+        4. 重点函数：
+            function proxy(target, sourceKey, key) { // target是vm，sourceKey是"_data"，key是"name"
+                sharedPropertyDefinition.get = function proxyGetter() {
+                    return this[sourceKey][key];
+                    return this[_data][name];
+                };
+                sharedPropertyDefinition.set = function proxySetter(val) {
+                    this[sourceKey][key] = val;
+                    this[_data][name] = val;
+                };
+                Object.defineProperty(target, key, sharedPropertyDefinition);
+                Object.defineProperty(vm, name, getter和setter方法的配置项);
+            }
+     -->
+    <div id="app">
+        <h1>{{name}}</h1>
+        <h1>{{age}}</h1>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                name: 'zhangsan',
+                age: 20,
+            },
+        });
+    </script>
+</body>
+</html>

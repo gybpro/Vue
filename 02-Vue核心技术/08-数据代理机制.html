@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据代理机制</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        1.数据代理机制：
+            通过访问代理对象的属性来间接访问目标对象的属性
+            数据代理机制的实现依靠Object.defineProperty()方法
+        2.ES6新特性：在对象中的函数/方法的 : function 是可以省略的，直接写 方法名()就可以
+     -->
+    <div id="app">
+        <input v-model="msg" />
+    </div>
+
+    <script>
+        // 目标对象
+        let target = {
+            name: 'zhangsan',
+        };
+
+        // 代理对象
+        let proxy = {};
+
+        // 注意：如果要实现数据代理机制，就必须给proxy新增与target相同的属性
+        // 代理对象新增的属性名要和目标对象属性名一致
+        Object.defineProperty(proxy, 'name', {
+            get() {
+                console.log('getter方法执行了');
+                return target.name;
+            },
+            set(val) {
+                target.name = val;
+            },
+        });
+
+        // Vue操作数据就是靠数据代理机制
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue!',
+                target,
+            },
+        });
+    </script>
+</body>
+</html>
