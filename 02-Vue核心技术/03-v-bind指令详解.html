@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-bind指令详解</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        v-bind指令详解：
+            1.作用：让HTML标签的属性值产生动态效果
+            2.语法格式：<HTML标签 v-bind:参数="表达式"></HTML标签>
+            3.编译原理：
+                编译前：<HTML标签 v-bind:参数="表达式"></HTML标签>
+                编译后：<HTML标签 参数="表达式执行结果"></HTML标签>
+                注意事项：
+                    1.在编译的时候v-bind后面的参数名会被编译为HTML标签的属性名
+                    2.表达式会关联data，当data发生变化后，表达式的执行结果就会发生改变，此时就会产生动态效果。
+            4.因为v-bind很常用，所以vue提供了简写":"
+            5.插值语法和指令语法的使用时机：
+                1.凡是标签体内容动态，就用插值语法
+                2.只要是标签属性动态，就用指令语法
+     -->
+    <div id="app">
+        <span v-bind:title="msg">鼠标悬停几秒钟查看此处动态绑定的提示信息！</span>
+
+        <img v-bind:src="imgPath"> <br>
+        <!-- v-bind:可以简写为":" -->
+        <img :src="imgPath"> <br>
+
+        <!-- 典型案例：v-bind可以让文本框数据动态绑定，超链接地址动态绑定 -->
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue!',
+                imgPath: '../img/1.jpg',
+            }
+        });
+    </script>
+</body>
+</html>
