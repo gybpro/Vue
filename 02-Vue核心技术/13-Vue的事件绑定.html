@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue的事件绑定</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        Vue事件处理：
+            1.指令语法格式：
+                <标签 v-指令名:参数名="表达式">{{插值语法}}</标签>
+                表达式可以写常量、JS表达式、Vue实例所管理的XXX
+            2.Vue中事件绑定指令：v-on指令
+                语法格式：v-on:事件名="表达式"
+                如：click鼠标单击事件、keydown键盘按下事件、mouseover鼠标聚焦事件等
+            3.Vue中，所有事件关联的回调函数，需要在Vue实例的配置项methods中定义
+                methods是一个对象：{}，对象中可以定义多个回调函数
+            4.v-on可以简写为@：
+                v-on:click 简写为：@click
+                v-on:keydown 简写为：@keydown
+                v-on:mouseover 简写为：@mouseover
+            5.绑定的回调函数，如果不需要传递参数，则小括号可以省略
+            6.Vue在调用回调函数的时候，会自动给回调函数传递一个事件对象，这个对象是当前发生的事件对象
+            7.在调用回调函数的时候，可以在参数上手动添加占位符$event，Vue扫描到这个$event占位符后，会自动将当前事件对象传递过去
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <!-- Vue事件绑定 -->
+        <!-- 错误示例：alert()和sayHello()函数并没有被Vue实例管理 -->
+        <button v-on:click="alert('hello')">按钮1</button>
+        <button v-on:click="sayHello()">按钮2</button>
+        <button v-on:click="sayHelloVue()">按钮3</button>
+        <button @click="sayHelloVue()">按钮4</button>
+        <button @click="sayHelloVue">按钮5</button>
+        <button @click="sayHelloVue('jack')">按钮6</button>
+        <button @click="sayHelloVue('jack', $event)">按钮7</button>
+    </div>
+
+    <script>
+        // 自定义函数
+        function sayHello() {
+            alert('hello');
+        }
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue!',
+            },
+            methods: {
+                sayHelloVue(jack) {
+                    alert(this.msg);
+                    console.log(event);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

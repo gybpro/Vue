@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件回调函数中的this</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        methods函数中的this是，当前Vue实例对象
+        箭头函数中this失效：箭头函数中的this是从父级作用域中继承过来的
+        对于当前程序来所，父级作用域是全局作用域：window
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h1>计数器：{{counter}}</h1>
+        <button @click="counter++">点击加一</button>
+        <button @click="add">点击加一</button>
+        <button @click="add2">点击加一</button>
+    </div>
+
+    <script>
+        // 自定义函数
+        function sayHello() {
+            alert('hello');
+        }
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue!',
+                counter: 0,
+            },
+            // 1.methods对象中的方法可以通过vm去访问
+            // 2.methods对象中的方法没有做数据代理
+            methods: {
+                add() {
+                    // methods函数中的this是，当前Vue实例对象
+                    this.counter++;
+                },
+                add2: () => {
+                    // 箭头函数中this失效：箭头函数中的this是从父级作用域中继承过来的
+                    // 对于当前程序来所，父级作用域是全局作用域：window
+                    this.counter++;
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

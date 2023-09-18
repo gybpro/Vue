@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>data函数</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        data函数：
+            1.当data是函数的时候，必须返回一个{}对象
+        配置项：enumerable、configurable
+            enumerable表示的是该属性是否可枚举/遍历/迭代（是否可以被Object.keys()获取）
+            configurable表示的是该属性是否可被修改或者删除
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    msg: 'Hello Vue!',
+                }
+            }
+        });
+
+        let phone = {
+            name: 'mate 60 pro'
+        }
+
+        Object.defineProperty(phone, 'color', {
+            value: '青山黛',
+            // enumerable表示的是该属性是否可枚举/遍历/迭代（是否可以被Object.keys()获取）
+            enumerable: true,
+            // configurable表示的是该属性是否可被修改或者删除
+            configurable: true,
+        });
+    </script>
+</body>
+</html>
