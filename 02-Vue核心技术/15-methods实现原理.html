@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>methods实现原理</title>
+
+    <script src="../js/myvue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        手写myvue实现methods
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h1>{{name}}</h1>
+        <h1>{{age}}</h1>
+        <input type="text" aria-label="Label Text" v-model:value="msg"/>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue!',
+                name: 'zhangsan',
+                age: 33,
+            },
+            // 1.methods对象中的方法可以通过vm去访问
+            // 2.methods对象中的方法没有做数据代理
+            methods: {
+                sayHi() {
+                    alert('hi');
+                    console.log(this === qq);
+                    console.log(this.msg);
+                },
+                sayHello() {
+                    alert('hello');
+                },
+                sayWhat: () => {
+                    console.log(this === qq);
+                    console.log(this);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
