@@ -8,7 +8,6 @@ class Vue {
         this.data = options.data;
         this.element = document.querySelector(options.el);
         this.template = this.element.innerHTML;
-        vueGoTo[options.el] = this;
 
         // 创建Observer实例来观察数据对象
         this.observer = new Observer(this, this.data);
@@ -53,11 +52,12 @@ class Vue {
         let vm = this;
         let directives = element.querySelectorAll('[v-model\\:value]');
         directives.forEach(directive => {
-            let model = directive.getAttribute("v-model:value");
-            directive.setAttribute("value", this.data[model]);
-
+            let key;
             directive.outerHTML = directive.outerHTML.replace(/v-model:value="(.+?)"/g, (match, expression) => {
-                let value = "oninput=\'vueGoTo[\"" + this.options.el + "\"].refreshData(\"" + expression + "\", value)\'";
+                key = expression;
+                let value = eval('this.data.' + expression);
+                value = "oninput=\'eval(\"vm.data.\" + \"" + expression + "\" + \" = value\")\'";
+                console.log(value);
                 return value !== undefined ? value : '';
             });
         });
@@ -65,7 +65,7 @@ class Vue {
         // 正则匹配替换插值语法中的属性值
         this.element.innerHTML = this.element.innerHTML.replace(/\{\{(.+?)\}\}/g, (match, expression) => {
             let value = eval('this.data.' + expression);
-            value = value + "<span inter='" + expression + "'></span>"
+            value = value + "<span inter='" + expression + "'><span>"
             return value !== undefined ? value : '';
         });
 
@@ -78,11 +78,9 @@ class Vue {
             // 正则匹配替换插值语法中的属性值
             let value = eval('this.data.' + directive.getAttribute('inter'));
             let parentNode = directive.parentNode;
-            if (value != parentNode.innerText) {
-                parentNode.innerHTML = parentNode.innerHTML.replace(parentNode.innerText, (match, expression) => {
-                    return value !== undefined ? value : '';
-                });
-            }
+            parentNode.innerHTML = parentNode.innerHTML.replace(parentNode.innerText, (match, expression) => {
+                return value !== undefined ? value : '';
+            });
         });
     }
 
@@ -134,7 +132,7 @@ class Observer {
             let that = this;
             Object.defineProperty(data, key, {
                 get() {
-                    // console.log('读取数据', value);
+                    console.log('读取数据', value);
                     return value;
                 },
                 set(newValue) {
@@ -152,7 +150,7 @@ class Observer {
 
     // 通知相关watcher数据变化，实现重新渲染
     notify(key) {
-        // console.log('触发更新', key);
+        console.log('触发更新', key);
         // 在实际的Vue实现中，此处会通知相关的Watcher进行更新
 
         // 简化的实现：
@@ -176,10 +174,8 @@ class Watcher {
     }
 
     update() {
-        // console.log('执行更新回调');
+        console.log('执行更新回调');
         // 在实际的Vue实现中，执行更新回调，比如更新DOM或触发组件的重新渲染
         this.updateCallback();
     }
 }
-
-const vueGoTo = [];

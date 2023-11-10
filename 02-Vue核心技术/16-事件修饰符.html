@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件修饰符</title>
+
+    <script src="../js/vue.js"></script>
+    
+    <style>
+        .divList {
+            width: 300px;
+            height: 200px;
+            background-color: skyblue;
+            overflow: auto;
+        }
+        .item {
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 
+        Vue中提供的事件修饰符：
+        .stop：     等同于 event.stopPropagation() 停止事件冒泡传播
+        .prevent：  等同于 event.preventDefault() 阻止事件的默认行为
+        .capture：  添加事件监听器时，使用事件捕获模式
+                        添加事件监听器包括两种不同的方式：
+                            一种是从内到外：事件冒泡模式
+                            一种是从外到内：事件捕获模式
+        .self：     只执行此元素自身发生的事件，其他元素传播的事件不执行
+        .once：     事件只能发生一次
+        .passive：  passive意为顺从/不抵抗，用于立即执行事件默认行为
+                        .prevent和.passive是对立，不能共存的，如果一起出现在一个事件上就会报错
+                            异常：Unable to preventDefault inside passive event listener invocation.
+                        .passive主要用于立即执行事件默认行为，不等待js函数的执行
+
+        在Vue中，事件修饰符是可以联合使用的，
+        但需要注意的是联合使用的时候是有执行顺序的：
+            @click.self.stop：  先.self，后.stop
+            @click.stop.self：  先.stop，后.self
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+
+        <!-- 阻止事件的默认行为 -->
+        <a href="http:://www.bilibili.com" @click.prevent="one">超链接.prevent</a>
+
+        <br>
+
+        <!-- 停止事件冒泡传播 -->
+        <div @click="three">
+            <div @click="two">
+                <button @click="one">冒泡</button>
+                <button @click.stop="one">.stop</button>
+            </div>
+        </div>
+        <div @click="three">
+            <!-- 这里添加.stop从这里阻止冒泡 -->
+            <div @click.stop="two">
+                <button @click="one">2.stop</button>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- 添加事件监听器的时候采用事件捕获模式 -->
+        <div @click.capture="three">
+            <div @click.capture="two">
+                <button @click.capture="one">添加事件监听器时采用事件捕获模式</button>
+                <button @click.capture="one">.capture</button>
+            </div>
+        </div>
+        <div @click.capture="three">
+            <!-- 这里没有添加.capture，则此元素及其子元素都会默认采用冒泡模式 -->
+            <div @click="two">
+                <button @click.capture="one">2无.capture</button>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- 只执行自身发生的事件 -->
+        <div @click="three">
+            <div @click.self="two">
+                <button @click="one">2.self</button>
+            </div>
+        </div>
+        <!-- 在Vue中，事件修饰符是可以联合使用的，但需要注意的是联合使用的时候是有执行顺序的 -->
+        <div @click="three">
+            <div @click="two">
+                <button @click.self.stop="one">.self.stop</button>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- 事件只能发生一次 -->
+        <button @click.once="one">.once</button>
+
+        <br><br>
+
+        <div class="divList" @wheel.passive="testPassive">
+            <div class="item">passive div1</div>
+            <div class="item">passive div2</div>
+            <div class="item">passive div3</div>
+        </div>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '事件修饰符',
+            },
+            methods: {
+                one(event) {
+                    alert('bilibili');
+                    // 手动调用preventDefault()方法，可以阻止默认事件行为
+                    // event.preventDefault();
+                },
+                two(event) {
+                    alert('2');
+                    // 阻止冒泡传播
+                    // event.stopPropagation();
+                },
+                three(event) {
+                    alert('3');
+                },
+                testPassive(event) {
+                    for (let i = 0; i < 10000; i++) {
+                        console.log("test passive");
+                    }
+                    // console.log("test passive");
+                    // 阻止默认事件行为
+                    // event.preventDefault();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

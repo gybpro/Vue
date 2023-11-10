@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算属性</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        计算属性：
+        1.使用Vue原有属性，经过一系列运算/计算之后，最终得到了一个全新的属性，叫做计算属性
+            Vue原有属性：data当中的属性可以叫做Vue的原有属性。
+            全新的属性：生成一个新的属性，和data中的属性无关，新的属性有自己的属性名和属性值
+        2.语法格式：需要用到新的配置项computed
+            computed: {
+                计算属性1: {
+                    // 计算属性中可以编写getter和setter方法
+                    // 当第一次读取计算属性的时候，自动调用getter方法，存入缓存，方便重复使用
+                    // 在计算属性关联的值发生变化之后的，会再次调用getter方法，更新缓存，防止脏读
+                    get() {
+
+                    },
+                    // 当修改计算属性的时候，自动调用setter方法
+                    set(val) {
+
+                    },
+                },
+                // 只有get()函数的简写形式
+                计算属性2() {
+                    return 计算过程;
+                },
+            }
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        输入信息：<input type="text" v-model="info"> <br>
+        反转信息（计算属性实现）：{{reverseInfo}} <br>
+        反转信息（计算属性实现）：{{reverseInfo}} <br>
+        反转信息（计算属性实现）：{{reverseInfo}} <br>
+        反转信息（计算属性实现）：{{reverseInfo}} <br>
+        反转信息（计算属性实现）：{{reverseInfo}} <br>
+        反转信息（方法实现）：{{reverseInfoMethod()}} <br>
+        反转信息（方法实现）：{{reverseInfoMethod()}} <br>
+        反转信息（方法实现）：{{reverseInfoMethod()}} <br>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '反转字符串',
+                info: '',
+            },
+            methods: {
+                reverseInfoMethod() {
+                    console.log('reverseInfo方法执行了');
+                    return this.info.split('').reverse().join('');
+                }
+            },
+            computed: {
+                // vn.hehe可以调用计算属性，说明计算属性也是通过数据代理机制实现的，但是计算属性与data无关，是无法通过$data获取的
+                hehe: {
+                    get() {
+                        console.log('get');
+                        console.log(this === vm);
+                        return "haha";
+                    },
+                    /* 不建议使用箭头函数，会导致this失效，指向的不是Vue实例，而是window对象
+                    get: () => {
+                        console.log('get');
+                        console.log(this === vm);
+                        return "haha";
+                    }, */
+                    set(vale) {
+                        console.log('set');
+                        console.log(this === vm);
+                    },
+                },
+                // 完整写法
+                /* reverseInfo: {
+                    get() {
+                        console.log('计算属性的get方法执行了');
+                        return this.info.split('').reverse().join('');
+                    },
+                    // setter方法很少用，几乎不用
+                    // 在setter方法不用的时候，计算属性可以简写
+                    set(val) {
+                        // 这样是递归，会导致栈内存溢出
+                        // this.reverseInfo = val;
+                        // 计算属性是通过关联值的变化改变的，可以通过修改关联值来实现修改计算属性
+                        this.info = val.toString().split('').reverse().join('');
+                    },
+                }, */
+                // 简写形式：无setter方法时
+                reverseInfo() {
+                    console.log('计算属性的get方法执行了');
+                    return this.info.split('').reverse().join('');
+                },
+            },
+        });
+    </script>
+</body>
+
+</html>

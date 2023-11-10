@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反转字符串</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        反转字符串可以用表达式完成，但是存在设计问题：
+        三个缺陷：
+            1.代码可读性差
+            2.代码无法复用
+            3.代码难以维护
+        Vue不建议在模板中使用表达式，使用计算属性抽取代码，实现可读性、可维护性的提高和代码的复用
+
+        反转字符串用方法也可以实现，且解决了表达式的三个缺陷，但是仍然存在效率问题：
+            虽然方法实现解决了三个缺陷，但是在多个地方调用会造成相同的方法重复运行，导致性能浪费，效率低下
+        Vue不建议在需要的动态值是相同的地方使用方法解决，使用计算属性可以实现一次动态计算，多个地方直接使用计算属性的结果
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        输入信息：<input type="text" v-model="info"> <br>
+        <!-- split('')按''空字符分割字符串为字符数组，reverse()反转数组，join('')用''空字符连接数组为字符串，实现反转数组 -->
+        反转信息（表达式实现）：{{info.split('').reverse().join('')}} <br>
+        <!-- 注意：在插值语法中方法的()小括号不能省略，在事件绑定中无参调用时才可以省略 -->
+        <!-- 插值语法中的函数/方法必须是Vue实例所管理的 -->
+        反转信息（方法实现）：{{reverseInfo()}} <br>
+        反转信息（方法实现）：{{reverseInfo()}} <br>
+        多次调用，重复执行，浪费性能，效率低下：{{reverseInfo()}} <br>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '反转字符串',
+                info: '',
+            },
+            methods: {
+                reverseInfo() {
+                    console.log('reverseInfo方法执行了');
+                    return this.info.split('').reverse().join('');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
