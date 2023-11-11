@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>侦听属性变化及深度监听</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        watch可以监听多个属性，可以监听Vue原有属性，也可以监听计算属性
+        watch的配置项：
+            handler(newValue, oldValue)：回调处理函数，有两个参数，新值和旧值
+            immediate：是否立即执行，true在初始化时立即调用一次handler()函数，默认false
+            deep：是否深度监听，true对多级结构的所有属性进行监听，属性变化时调用handler()，默认false
+        当监听属性为多级结构时，要加上单引号
+        当watch只有handler()函数时，可以简写为：属性名([newValue, oldValue]) { 方法体 }
+        watch可以后期添加，但要注意，后期添加监视，属性名必须加单引号
+        后期添加也可以简写：vm.$watch('属性名', function([newValue, oldValue]) { 函数体 });
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        number：<input type="text" v-model="number"><br />
+        a.b：<input type="text" v-model="a.b"><br />
+        a.c：<input type="text" v-model="a.c"><br />
+        a.d.e.f：<input type="text" v-model="a.d.e.f"><br />
+        number2（后期添加监视）：<input type="text" v-model="number2"><br />
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '侦听属性变化及深度监听',
+                number: 0,
+                number2: 0,
+                // a保存的是对象的内存地址，b的值发生变化，而a的地址没有变，不会触发侦听回调函数
+                a: {
+                    b: 0,
+                    c: 0,
+                    d: {
+                        e: {
+                            f: 0,
+                        },
+                    },
+                },
+            },
+            computed: {
+                hehe() {
+                    return 'haha' + this.number * 2;
+                },
+            },
+            watch: {
+                // watch可以监听多个属性
+                // 监听vue原有属性
+                number: {
+                    // 初始化的时候调用一次handler方法
+                    immediate: true, // 立即执行
+                    // 监听的方法是固定的handler()回调处理函数
+                    // handler()方法上有两个参数，第一个是newValue，表示新值，第二个是oldValue，表示旧值
+                    handler(newValue, oldValue) {
+                        console.log(newValue, oldValue);
+                        // 当前的this是Vue实例
+                        // 如果是箭头函数则指向的是window对象，不建议使用箭头函数
+                        console.log(this);
+                    }
+                },
+                // 监听计算属性
+                hehe: {
+                    handler(newValue, oldValue) {
+                        console.log(newValue, oldValue);
+                    }
+                },
+                // 不能直接监视b属性，因为它是在a里面不是在vue实例中的属性
+                // 在监听的属性为多级结构时，一定要添加单引号（本来就要，只是平时单层结构可以省略单引号）
+                'a.b': {
+                    handler() {
+                        console.log("多级结构要加单引号");
+                    }
+                },
+                // 当监听属性只有handler回调函数时，可以简写
+                'a.c'() {
+                    console.log("简写");
+                },
+                // 多级结构多个属性为同样的监听回调时，会有大量重复代码
+                // 这时可以采用深度监视/深度监听
+                a: {
+                    // 开启深度监视
+                    // 在需要监听多级结构的所有属性时，可以开启深度监听
+                    deep: true,
+                    handler() {
+                        console.log("深度监听，多级结构所有属性监听");
+                    }
+                },
+            }
+        });
+
+        // 后期添加监视，要加单引号
+        vm.$watch('a', {
+            immediate: true,
+            deep: true,
+            handler(newValue, oldValue) {
+                console.log("后期添加监视，要加单引号");
+            }
+        });
+        vm.$watch('number2', function (newValue, oldValue) {
+            console.log("后期添加监听简写");
+        });
+    </script>
+</body>
+
+</html>

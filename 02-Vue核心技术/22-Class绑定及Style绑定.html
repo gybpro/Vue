@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class绑定及Style绑定</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .static {
+            border: 1px solid burlywood;
+            background-color: skyblue;
+            width: 150px;
+            height: 50px;
+        }
+
+        .big {
+            width: 200px;
+            height: 200px;
+        }
+
+        .small {
+            width: 100px;
+            height: 100px;
+        }
+
+        .active {
+            background-color: rgb(0, 90, 150);
+        }
+
+        .text-danger {
+            color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 
+        Class绑定和Style绑定：
+            三种绑定形式：
+                1.字符串绑定：适用于确定动态绑定的样式个数只有1个，但是名字不确定的场景。
+                2.数组绑定：适用于样式的个数不确定，并且样式的名字也不确定的场景。
+                3.对象绑定：适用于样式的个数是固定的，样式的名字也是固定的场景，动态的决定是否使用样式。
+            以下主要展示Class绑定，Style同Class绑定
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <!-- 静态写法 -->
+        <div class="static small">{{msg1}}</div>
+        <br>
+        <button @click="changeBigSmall">变大/变小</button>
+        <!-- 动态写法：动静结合 -->
+        <!-- 适用场景：如果确定动态绑定的样式个数只有1个，但是名字不确定。 -->
+        <div class="static" :class="c1">{{msg1}}</div>
+        <hr />
+        <!-- 数组形式的适用场景：当样式的个数不确定，并且样式的名字也不确定的时候，可以采用数组形式。 -->
+        <div class="static" :class="[c2, c3]">{{msg2}}</div>
+        <br>
+        <div class="static" :class="classArray">{{msg2}}</div>
+        <hr />
+        <!-- 对象形式的适用场景：样式的个数是固定的，样式的名字也是固定的，但是需要动态的决定样式用还是不用。 -->
+        <button @click="changeClassBigSmall">变大/变小</button>
+        <div class="static" :class="classObj">{{msg3}}</div>
+        <hr />
+        <div class="static" :style="styleObj">{{msg4}}</div>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Class绑定',
+                msg1: 'Class绑定字符串',
+                msg2: 'Class绑定数组',
+                msg3: 'Class绑定对象',
+                msg4: 'Style绑定对象',
+                c1: 'small',
+                c2: 'active',
+                c3: 'text-danger',
+                classArray: ['active', 'text-danger'],
+                classObj: {
+                    // 该对象中属性的名字必须和样式名一致。
+                    active: true,
+                    'text-danger': true,
+                    big: true,
+                    small: false,
+                },
+                styleObj: {
+                    border: '1px solid burlywood',
+                    backgroundColor: 'skyblue',
+                    width: '150px',
+                    height: '50px',
+                }
+            },
+            methods: {
+                changeBigSmall() {
+                    if (this.c1 === 'big') {
+                        this.c1 = 'small';
+                    } else {
+                        this.c1 = 'big';
+                    }
+                },
+                changeClassBigSmall() {
+                    if (this.classObj.big === true) {
+                        this.classObj.big = false;
+                        this.classObj.small = true;
+                    } else {
+                        this.classObj.big = true;
+                        this.classObj.small = false;
+                    }
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

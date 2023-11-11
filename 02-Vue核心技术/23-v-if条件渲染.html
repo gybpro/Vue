@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-if条件渲染</title>
+    <script src="../js/vue.js"></script>
+</head>
+<style>
+    .image {
+        border: 1px solid #000;
+        width: 320px;
+        height: 200px
+    }
+
+    .image img {
+        width: 320px;
+        height: 200px
+    }
+</style>
+<body>
+    <!--
+        v-if条件渲染指令和v-show指令：
+            1.v-if是条件判断后渲染，条件不成立这整个元素不渲染，节省空间，提高初次渲染页面性能
+            2.v-if和v-else之间不能断开
+            3.v-show是通过修改CSS样式的display来达到隐藏和显示
+        v-if和v-show的选择：
+            1.如果元素频繁修改，则使用v-show，因为v-if要重新渲染开销大，v-show只需要修改样式
+            2.如果元素少修改或几乎无修改，则用v-if，因为v-if页面加载速度快，页面初次渲染效率高
+        template标签：
+            template标签只是起到占位符的作用，不会真正的出现在页面上，不会改变页面结构
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <button @click=changeImg>变!</button>
+        <div class="image">
+            <img src="../img/1.jpg" v-if="counter % 2 === 0" />
+            <!-- v-if和v-else之间不能断开 -->
+            <!-- <div></div> -->
+            <img src="../img/2.jpg" v-else />
+        </div>
+        <br />
+        <hr />
+        温度：<input type="number" v-model="temprature"><br />
+        天气：<span v-if="temprature <= 7">寒冷</span>
+        <span v-else-if="temprature <= 27">凉爽</span>
+        <span v-else>炎热</span>
+        <br />
+        <br />
+        <!-- div的渲染会导致页面结构发生改变
+        <div v-if="counter >= 10">
+            <input type="text"/>
+            <input type="checkbox"/>
+            <input type="radio"/>
+        </div> -->
+        <!-- template标签只是起到占位符的作用，不会真正的出现在页面上，不会改变页面结构 -->
+        <template v-if="counter >= 10">
+            <input type="text"/>
+            <input type="checkbox"/>
+            <input type="radio"/>
+        </template>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'v-if条件渲染',
+                counter: 0,
+                temprature: 20,
+            },
+            methods: {
+                changeImg() {
+                    this.counter++;
+                },
+            },
+        })
+    </script>
+</body>
+
+</html>

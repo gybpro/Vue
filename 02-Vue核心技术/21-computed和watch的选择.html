@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>computed和watch的选择</title>
+
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        computed和watch的选择:
+            1.在computed和watch同时都能完成时，优先选择computed
+            2.在使用异步的情况下，只能用watch完成，computed无法完成
+            3.普通函数和箭头函数的使用：
+                要看这个函数是否属于Vue管理
+                是Vue管理，统一写普通函数
+                不是Vue管理，统一写箭头函数
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h3>computed实现</h3>
+        数值1：<input type="number" v-model="number1"><br />
+        数值2：<input type="number" v-model="number2"><br />
+        比较大小：{{compareResult1}} <br /><br />
+        <hr />
+        <h3>watch实现</h3>
+        数值3：<input type="number" v-model="number3"><br />
+        数值4：<input type="number" v-model="number4"><br />
+        比较大小：{{compareResult2}} <br />
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'computed和watch的选择',
+                number1: 0,
+                number2: 0,
+                number3: 0,
+                number4: 0,
+                compareResult2: '',
+            },
+            computed: {
+                compareResult1() {
+                    /* if (this.number1 > this.number2) {
+                        return this.number1 + ' > ' + this.number2;
+                    } else if (this.number1 < this.number2) {
+                        return this.number1 + ' < ' + this.number2;
+                    } else {
+                        return this.number1 + ' = ' + this.number2;
+                    } */
+                    setTimeout(() => {
+                        if (this.number1 > this.number2) {
+                            return this.number1 + ' > ' + this.number2;
+                        } else if (this.number1 < this.number2) {
+                            return this.number1 + ' < ' + this.number2;
+                        } else {
+                            return this.number1 + ' = ' + this.number2;
+                        }
+                    }, 1000 * 2);
+                }
+            },
+            watch: {
+                number3: {
+                    immediate: true,
+                    handler(newValue) {
+                        setTimeout(() => {
+                            console.log(this);
+                            if (newValue > this.number4) {
+                                this.compareResult2 = newValue + " > " + this.number4;
+                            } else if (newValue < this.number4) {
+                                this.compareResult2 = newValue + " < " + this.number4;
+                            } else {
+                                this.compareResult2 = newValue + " = " + this.number4;
+                            }
+                        }, 1000 * 2);
+                    }
+                },
+                number4: {
+                    immediate: true,
+                    handler(newValue) {
+                        setTimeout(function () {
+                            // setTimeout中的回调函数不是Vue管理的，是JavaScript引擎管理的，调用这个函数的是window对象
+                            // 因此，this指向的是window对象，不是Vue实例对象
+                            console.log(this);
+                            if (this.number3 < newValue) {
+                                this.compareResult2 = this.number3 + " < " + newValue;
+                            } else if (this.number3 > newValue) {
+                                this.compareResult2 = this.number3 + " > " + newValue;
+                            } else {
+                                this.compareResult2 = this.number3 + " = " + newValue;
+                            }
+                        }, 1000 * 2);
+                        setTimeout(() => {
+                            // 箭头函数没有this，只能向上一级获取this
+                            // 调用setTimeout函数的是Vue实例，所以this指向的是Vue实例对象
+                            console.log(this);
+                            if (this.number3 < newValue) {
+                                this.compareResult2 = this.number3 + " < " + newValue;
+                            } else if (this.number3 > newValue) {
+                                this.compareResult2 = this.number3 + " > " + newValue;
+                            } else {
+                                this.compareResult2 = this.number3 + " = " + newValue;
+                            }
+                        }, 1000 * 2);
+                    }
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>
