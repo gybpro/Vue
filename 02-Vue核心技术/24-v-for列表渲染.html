@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-for列表渲染</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th,td{border: 2px solid #000;}
+    </style>
+</head>
+<body>
+    <!-- 
+        v-for列表渲染：
+            1.v-for要写在循环项上（具体的元素）
+            2.v-for语法规则：
+                v-for="(元素名, 下标) in/of 数组"
+            3.遍历类型：
+                遍历数组：v-for="(元素名, 下标) in/of 数组"
+                遍历对象：v-for="(属性值, 属性名，下标) in/of 对象"
+                遍历字符串：v-for="(字符, 下标) in/of 字符串"
+                遍历指定次数：v-for="(当前次数, 下标) in/of 总次数"
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <!-- 动态列表 -->
+        <h2>遍历数组</h2>
+        <ul>
+            <li v-for="name in names" :key="index">{{name}}</li>
+        </ul>
+        <ul>
+            <li v-for="(name, index) of names" :key="index">{{name}}-{{index}}</li>
+        </ul>
+        <ul>
+            <li v-for="user in users" :key="id">
+                姓名：{{user.name}}，年龄：{{user.age}}
+            </li>
+        </ul>
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>选择</th>
+            </tr>
+            <tr v-for="(user, index) in users" :key="id">
+                <td>{{index + 1}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.age}}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </table>
+        <br />
+        <hr />
+        <h2>遍历对象</h2>
+        <ul>
+            <li v-for="(value, propertyName, index) in user" :key="value">
+                {{propertyName}}， {{value}}，{{index}}
+            </li>
+        </ul>
+        <h2>遍历字符串</h2>
+        <ul>
+            <li v-for="(char, index) in str" :key="index">
+                {{char}}-{{index}}
+            </li>
+        </ul>
+        <h2>遍历指定次数</h2>
+        <ul>
+            <li v-for="(item, index) in counter" :key="index">
+                {{item}}-{{index}}
+            </li>
+        </ul>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'v-for列表渲染',
+                names: ['张三', '李四', '王五'],
+                users: [
+                    { id: 111, name: '张三', age: 33 },
+                    { id: 222, name: '李四', age: 20 },
+                    { id: 333, name: '王五', age: 22 },
+                ],
+                user: { id: 111, name: '张三', age: 33, gender: '男' },
+                str: "hahahai",
+                counter: 5,
+            },
+        })
+    </script>
+</body>
+
+</html>

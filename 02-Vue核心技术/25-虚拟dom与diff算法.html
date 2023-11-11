@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虚拟dom与diff算法</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th,td{border: 1px solid black;}
+    </style>
+</head>
+
+<body>
+    <!--
+        Vue框架是采用了虚拟DOM机制+diff算法，来提高执行效率的
+            虚拟DOM：在内存中的dom对象
+            diff算法：一种快速比较出两个事物之间不同之处的算法
+        v-for指令中的key：
+            key是dom元素的唯一标识
+
+            分析，采用index作为key存在的问题：
+                第一个问题：效率低下，频繁删除重新渲染，影响用户体验
+                第二个问题：
+                    非常严重，产生了错乱，尤其是对数组中的某些元素进行操作（增删非末尾元素）
+                    影响程序的正确运行，给出了错误的结果，会导致程序不安全
+            解决：用对象的id作为key
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>英雄</th>
+                <th>能量值</th>
+                <th>选择</th>
+            </tr>
+            <!--
+                v-for指令所在的标签中，还有一个非常重要的属性：
+                    :key
+                如果没有指定:key属性，Vue会自动拿index作为dom的key
+                这个key是dom元素的唯一标识
+
+                分析，采用index作为key存在的问题：
+                    第一个问题：效率低下，频繁删除重新渲染，影响用户体验
+                    第二个问题：
+                        非常严重，产生了错乱，尤其是对数组中的某些元素进行操作（增删非末尾元素）
+                        影响程序的正确运行，给出了错误的结果，会导致程序不安全
+                解决：用对象的id作为key
+             -->
+            <tr v-for="(hero,index) in heroArr" :key="hero.id">
+                <td>{{index+1}}</td>
+                <td>{{hero.name}}</td>
+                <td>{{hero.power}}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </table>
+        <button @click="add">添加英雄麦文</button>
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                msg : '虚拟dom与diff算法',
+                heroArr : [
+                    {id:'101',name:'艾格文',power:10000},
+                    {id:'102',name:'麦迪文',power:9000},
+                    {id:'103',name:'古尔丹',power:8000},
+                    {id:'104',name:'萨尔',power:6000}
+                ]
+            },
+            methods : {
+                add(){
+                    this.heroArr.unshift({id:'105',name:'麦文',power:9100});
+                    // this.heroArr.push({id:'105',name:'麦文',power:9100});
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
