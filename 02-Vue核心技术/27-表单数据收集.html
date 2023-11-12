@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表单数据的收集</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+        表单数据收集：基础知识综合运用
+        语法糖(事件、按键等各种修饰符)：
+            .trim：去除前后空格
+            .number：将输入的值转为数值类型
+            .lazy：将input事件(每次输入触发)改为change事件(每次离焦数据值变化时)
+                change和blur的区别：blur离焦必定触发，change离焦数据值不变时候不触发。(change先于blur触发)
+            .prevent：阻止默认行为
+            .stop：阻止冒泡
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <form @submit.prevent="send">
+            用户名：<input type="text" v-model.trim="user.username"><br><br>
+            密码：<input type="password" v-model.trim="user.password"><br><br>
+            年龄：<input type="number" v-model.number="user.age"><br><br>
+            性别：
+                男<input type="radio" name="gender" value="0" v-model="user.gender">
+                女<input type="radio" name="gender" value="1" v-model="user.gender"><br><br>
+            爱好：
+                旅游<input type="checkbox" value="travel" v-model="user.interest">
+                运动<input type="checkbox" value="sport" v-model="user.interest">
+                唱歌<input type="checkbox" value="sing" v-model="user.interest"><br><br>
+            学历：
+                <select v-model="user.grade">
+                    <option value="">请选择学历</option>
+                    <option value="cz">初中</option>
+                    <option value="gz">高中/高职</option>
+                    <option value="zk">大学专科</option>
+                    <option value="bk">大学本科</option>
+                    <option value="ss">硕士研究生</option>
+                    <option value="bs">博士研究生</option>
+                </select><br><br>
+            简介：<textarea cols="50" rows="15" v-model.lazy="user.introduce"></textarea><br><br>
+            <input type="checkbox" v-model="user.accept">阅读并接受协议<br><br>
+            <!--<button @click.prevent="send">注册</button>-->
+            <button>注册</button>
+        </form>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '表单数据的收集',
+                user: {
+                    gender: 1,
+                    interest: ["travel"],
+                },
+            },
+            methods: {
+                send() {
+                    alert("ajax...");
+                    // 将收集好的数据发送给服务器
+                    console.log(JSON.stringify(this.user));
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>

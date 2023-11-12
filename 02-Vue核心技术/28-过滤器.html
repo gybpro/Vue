@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>过滤器</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!--
+        场景：从服务器端返回数值型number，这个number的值可能是这几种情况：
+        ''、null、undefined、60.5（一般真实情况后端要做处理，但前端也要有保障）
+        要求：
+            如果是''、null、undefined ，页面上统一显示为 -
+            如果不是 ''、null、undefined，则页面上显示真实的数字即可。
+        在Vue3当中，已经将过滤器语法废弃了，变为了全局$filters属性配置，
+        但也不推荐使用，还是推荐使用计算属性+方法实现
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h2>数值型数据：{{number}}</h2>
+        <h2>数值型数据：{{ number | emptyProcessing | numFixed(2) }}</h2>
+        <h2>数值型数据：{{ number | emptyProcessing1 | numFixed1(2) }}</h2>
+    </div>
+    <hr>
+    <div id="app2">
+        <h2>数值型数据：{{ number | emptyProcessing1 | numFixed1(2) }}</h2>
+    </div>
+    <script>
+        Vue.filter('emptyProcessing1', function (val) {
+            if (val === '' || val === null || val === undefined) {
+                return '-';
+            }
+            return val;
+        });
+
+        Vue.filter('numFixed1', function (val, fixed) {
+            return val.toFixed(fixed);
+        });
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '过滤器',
+                number: 12.3,
+            },
+            // 局部过滤器
+            filters: {
+                emptyProcessing(val) {
+                    if (val === '' || val === null || val === undefined) {
+                        return '-';
+                    }
+                    return val;
+                },
+                numFixed(val, fixed) {
+                    return val.toFixed(fixed);
+                },
+            }
+        });
+
+        const app2 = new Vue({
+            el: '#app2',
+            data: {
+                number: 2.3456,
+            },
+        });
+    </script>
+</body>
+
+</html>

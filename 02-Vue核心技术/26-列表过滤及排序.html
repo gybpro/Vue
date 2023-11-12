@@ -15,103 +15,103 @@
 </head>
 
 <body>
-<!--
-    列表过滤案例：可以使用watch和computed实现（优先用computed实现）
- -->
-<div id="app">
-    <h1>{{msg}}</h1>
-    <input type="text" placeholder="请输入搜索关键字" v-model="keyword">
-    <br>
-    <button @click="type = 1">升序</button>
-    <button @click="type = 2">降序</button>
-    <button @click="type = 3">原序</button>
-    <table>
-        <caption></caption>
-        <tr>
-            <th>序号</th>
-            <th>英雄</th>
-            <th>能量值</th>
-            <th>选择</th>
-        </tr>
-        <tr v-for="(hero,index) in filterHeroArr" :key="hero.id">
-            <td>{{index + 1}}</td>
-            <td>{{hero.name}}</td>
-            <td>{{hero.power}}</td>
-            <td><input type="checkbox"></td>
-        </tr>
-    </table>
-</div>
-<script>
-    const vm = new Vue({
-        el: '#app',
-        data: {
-            msg: '列表过滤',
-            heroArr: [
-                {id: '101', name: '艾格文', power: 10000},
-                {id: '102', name: '麦迪文', power: 9000},
-                {id: '103', name: '古尔丹', power: 8000},
-                {id: '104', name: '萨尔', power: 12000}
-            ],
-            keyword: '',
-            // filterHeroArr: [],
-            type: 0,
-        },
-        // 监听实现
-        /* watch: {
-            // keyword(val) {
-            //     this.filterHeroArr = this.heroArr.filter((hero) => {
-            //         return hero.name.indexOf(val) >= 0;
-            //     });
-            // }
-            keyword: {
-                immediate: true,
-                handler(val) {
-                    this.filterHeroArr = this.heroArr.filter((hero) => {
-                        return hero.name.indexOf(val) >= 0;
-                    });
-                }
-            }
-        }, */
-        // 计算属性实现（优先使用）
-        computed: {
-            filterHeroArr() {
-                // 执行过滤
-                const arr = this.heroArr.filter((hero) => {
-                    return hero.name.indexOf(this.keyword) >= 0;
-                });
-
-                // 排序
-                arr.sort((a, b) => {
-                    switch (this.type) {
-                        case 1:
-                            return a.power - b.power;
-                        case 2:
-                            return b.power - a.power;
+    <!--
+        列表过滤案例：可以使用watch和computed实现（优先用computed实现）
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <input type="text" placeholder="请输入搜索关键字" v-model="keyword">
+        <br>
+        <button @click="type = 1">升序</button>
+        <button @click="type = 2">降序</button>
+        <button @click="type = 3">原序</button>
+        <table>
+            <caption></caption>
+            <tr>
+                <th>序号</th>
+                <th>英雄</th>
+                <th>能量值</th>
+                <th>选择</th>
+            </tr>
+            <tr v-for="(hero,index) in filterHeroArr" :key="hero.id">
+                <td>{{index + 1}}</td>
+                <td>{{hero.name}}</td>
+                <td>{{hero.power}}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '列表过滤及排序',
+                heroArr: [
+                    {id: '101', name: '艾格文', power: 10000},
+                    {id: '102', name: '麦迪文', power: 9000},
+                    {id: '103', name: '古尔丹', power: 8000},
+                    {id: '104', name: '萨尔', power: 12000}
+                ],
+                keyword: '',
+                // filterHeroArr: [],
+                type: 0,
+            },
+            // 监听实现
+            /* watch: {
+                // keyword(val) {
+                //     this.filterHeroArr = this.heroArr.filter((hero) => {
+                //         return hero.name.indexOf(val) >= 0;
+                //     });
+                // }
+                keyword: {
+                    immediate: true,
+                    handler(val) {
+                        this.filterHeroArr = this.heroArr.filter((hero) => {
+                            return hero.name.indexOf(val) >= 0;
+                        });
                     }
-                });
+                }
+            }, */
+            // 计算属性实现（优先使用）
+            computed: {
+                filterHeroArr() {
+                    // 执行过滤
+                    const arr = this.heroArr.filter((hero) => {
+                        return hero.name.indexOf(this.keyword) >= 0;
+                    });
 
-                // 返回计算结果
-                return arr;
-            }
-        },
-    });
+                    // 排序
+                    arr.sort((a, b) => {
+                        switch (this.type) {
+                            case 1:
+                                return a.power - b.power;
+                            case 2:
+                                return b.power - a.power;
+                        }
+                    });
 
-    // 回顾filter
-    let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                    // 返回计算结果
+                    return arr;
+                }
+            },
+        });
 
-    // filter不会破坏原数组的结构，会生成一个全新的数组。
-    let newArr = arr.filter((num, index) => {
-        return num > 4;
-    });
-    console.log(newArr);
+        // 回顾filter
+        let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    // 回顾sort
-    // sort是对原数组进行排序，会改变原数组结构，不会产生新的数组
-    arr.sort((a, b) => {
-        return b - a;
-    });
-    console.log(arr);
-</script>
+        // filter不会破坏原数组的结构，会生成一个全新的数组。
+        let newArr = arr.filter((num, index) => {
+            return num > 4;
+        });
+        console.log(newArr);
+
+        // 回顾sort
+        // sort是对原数组进行排序，会改变原数组结构，不会产生新的数组
+        arr.sort((a, b) => {
+            return b - a;
+        });
+        console.log(arr);
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue的其他指令</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+        Vue的其他指令：
+            v-text：innerText语法糖
+            v-html：innerHTML语法糖
+            v-cloak：斗篷、一般用于隐藏{{}}胡子和防止初始化时闪烁，在Vue实例接管后会删除该指令
+            v-pre：Vue不对其进行处理，为了提高编译效率，可以在没有使用Vue语法的地方使用v-pre指令
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <span v-text="text"></span>
+        <span v-html="html"></span>
+        <span v-cloak>{{html}}</span>
+        <h2 v-pre>{{msg}}</h2>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Vue的其他指令',
+                text: "<h2>v-text</h2>",
+                html: "<h2>v-html</h2>",
+            },
+        });
+    </script>
+</body>
+
+</html>
