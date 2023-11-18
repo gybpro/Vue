@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组的响应式处理</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        在Vue中，通过数组的下标去修改数组中的元素，默认情况下是没有添加响应式处理的
+        数组响应式处理的两种方案：
+            1.vm.$set(数组对象, 下标, 值)，Vue.set(数组对象, 下标, 值)
+            2.Vue提供的7个数组操作函数：
+                push(ele)：往数组末尾添加元素
+                pop()：从数组末尾取出元素
+                reverse()：翻转数组
+                splice(index, len, item...)：拼接数组（先删除后添加）
+                    index是起始下标，len是删除长度，item是添加的元素
+                    splice可用于先删除后添加，也可只用于删除或添加
+                unshift(ele)：往数组头部添加元素
+                shift()：从数组头部取出元素
+                sort()：排序数组
+            这7个函数的底层其实还是和数据劫持一致：
+                1.修改原数据（操作数组）
+                2.重新渲染页面
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <ul>
+            <li v-for="user in users">
+                {{user}}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="vip in vips" :key="vip.id">
+                {{vip.name}}
+            </li>
+        </ul>
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                msg : '数组的响应式处理',
+                users : ['张三', '李四', '王五'],
+                vips : [
+                    {id:'111', name:'张安世'},
+                    {id:'222', name:'诸葛孔明'}
+                ]
+            }
+        })
+    </script>
+</body>
+</html>

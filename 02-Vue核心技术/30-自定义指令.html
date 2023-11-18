@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        自定义指令：
+            自定义指令可以在一个指令中完成多个功能，让代码更简洁
+        指令的命名：
+            1.Vue会自动在自定义指令名的开头加上v- 
+            2.官方建议指令名全小写，单词间用-分隔
+        指令的回调函数有两个执行时机：
+            1.标签和指令第一次绑定的时候 
+            2.模板重新解析的时候
+        指令的回调函数有两个参数：
+            1.真实的dom元素对象 
+            2.标签与指令绑定的关系对象
+     -->
+    <div id="app">
+        <h1>自定义指令</h1>
+        <div v-text="msg"></div>
+        <div v-text-danger="msg"></div>
+        用户名：<input type="text" v-bind:value="username">
+        <div>
+            用户名：<input type="text" v-bind-blue="username">
+        </div>
+    </div>
+
+    <div id="app2">
+        <div v-text="msg"></div>
+        <div v-text-danger="msg"></div>
+        <div>
+            用户名：<input type="text" v-bind-blue="username">
+        </div>
+    </div>
+
+    <script>
+        // 定义全局指令
+        // 函数式
+        Vue.directive('text-danger', function(element, binding) {
+            element.innerText = binding.value;
+            element.style.color = 'orange';
+        });
+        // 对象式
+        Vue.directive('bind-blue', {
+            bind(element, binding) {
+                element.value = binding.value;
+            },
+            inserted(element, binding) {
+                element.parentNode.style.backgroundColor = 'skyblue';
+            },
+            update(element, binding) {
+                element.value = binding.value;
+            }
+        });
+
+        const vm2 = new Vue({
+            el : '#app2',
+            data : {
+                msg : '欢迎学习Vue框架！',
+                username : '哈哈哈',
+            }
+        })
+
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                msg : '自定义指令',
+                username : '啦啦啦',
+            },
+            // 定义局部指令
+            // 指令的命名：1.Vue会自动在自定义指令名的开头加上v- 2.官方建议指令名全小写，单词间用-分隔
+            // 指令的回调函数有两个执行时机：1.标签和指令第一次绑定的时候 2.模板重新解析的时候
+            // 指令的回调函数有两个参数：1.dom元素对象 2.标签与指令绑定的关系对象
+            directives : {
+                // 定义指令有两种方式：1.函数式 2.对象式
+                // 函数式定义：
+                'text-danger': function(element, binding) {
+                    // 自定义指令中的this是Window，而不是vue实例
+                    console.log(this);
+                    element.innerText = binding.value;
+                    element.style.color = 'pink';
+                },
+                'bind-blue': function(element, binding) {
+                    element.value = binding.value;
+                    console.log(element);
+                    // element.parentNode是null，为什么？
+                    console.log(element.parentNode);
+                    // 因为回调函数在执行的时候，只是完成了内存中的绑定，此时元素还未插入到页面中
+                    // 获取/修改元素的parentNode，要使用对象式定义指令
+                    // element.parentNode.style.backgroundColor = 'skyblue';// 这里会报错
+                },
+                'bind-blue': {
+                    // 对象式定义指令中的三个函数名是固定的，会被自动调用
+                    // 标签与指令绑定的钩子/时机函数
+                    bind(element, binding) {
+                        // 自定义指令中的this是Window，而不是vue实例
+                        console.log(this);
+                        element.value = binding.value;
+                    },
+                    // 标签插入页面之后的钩子/时机函数
+                    inserted(element, binding) {
+                        element.parentNode.style.backgroundColor = 'skyblue';
+                    },
+                    // 模板重新解析的钩子/时机函数
+                    update(element, binding) {
+                        element.value = binding.value;
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+</html>

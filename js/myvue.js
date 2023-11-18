@@ -22,14 +22,18 @@ class Vue {
             // 首字母为_和$则不代理
             let firstChar = propertyName.charAt(0);
             if (!(firstChar === '_' || firstChar === '$')) {
+                // 数据代理
                 Object.defineProperty(this, propertyName, {
+                    // 代理获取
                     get() {
                         // 返回options的data中的数据
                         return options.data[propertyName];
                     },
+                    // 数据劫持
                     set(val) {
-                        // 修改options的data中的数据
+                        // 1.修改options的data中的数据
                         options.data[propertyName] = val;
+                        // 2.重新渲染页面
                     }
                 });
             }
@@ -130,15 +134,20 @@ class Observer {
         if (!(firstChar === '_' || firstChar === '$')) {
             // 保留外部函数的上下文对象，传递给内部函数使用
             let that = this;
+            // 数据代理
             Object.defineProperty(data, key, {
+                // 代理获取
                 get() {
                     console.log('读取数据', value);
                     return value;
                 },
+                // 数据劫持
                 set(newValue) {
                     console.log('更新数据', newValue);
                     if (newValue !== value) {
+                        // 1.修改options的data中的数据
                         value = newValue;
+                        // 2.重新渲染页面
                         // 内部函数的this对象已经改变，使用外部函数的上下文对象需要用临时变量保留引用
                         // 通知相关watcher数据变化，实现重新渲染
                         that.notify(key);
