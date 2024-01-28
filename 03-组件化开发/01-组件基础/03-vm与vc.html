@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vm与vc</title>
+    <script src="../../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <user></user>
+    </div>
+
+    <script>
+        // 为Vue的原型对象扩展属性
+        Vue.prototype.counter = 1000;
+
+        const user = {
+            template: `
+                <div>
+                    <h3>user组件</h3>
+                </div>
+            `,
+            components: {},
+            mounted() {
+                // this是VueComponent实例
+                console.log('vc', this);
+
+                // 通过Vue.extend()的源码可知，user是一个全新的VueComponent构造函数(该函数是局部变量，每次都是全新的)
+                // Vue底层获取到构造函数后，每次解析组件标签时，通过该构造函数创建VueComponent实例
+                console.log('this(vc实例) === user(vc构造函数)', this === user);
+            },
+        };
+        console.log('user', user);
+
+        // Vue底层自动调用Vue.extend()
+        // VueComponent类型/构造函数、vc实例的原型属性是指向 Vue类型/构造函数、vm实例原型对象 的引用/地址
+        // 底层这样设计是因为代码复用，重复利用vc与vm功能相同的部分
+        // 底层实现原理：VueComponent.prototype.__proto__ = Vue.prototype
+        console.log('Vue.prototype.counter', Vue.prototype.counter);
+        console.log('Vue.extend(user).prototype.counter', Vue.extend(user).prototype.counter);
+        console.log('Vue.prototype === Vue.extend(user).prototype', Vue.prototype === Vue.extend(user).prototype);
+        console.log('Vue.prototype === Vue.extend(user).prototype.__proto__', Vue.prototype ===
+            Vue.extend(user).prototype.__proto__);
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'vm与vc'
+            },
+            components: {
+                user
+            },
+            mounted() {
+                // this是Vue实例
+                console.log('vm', this);
+            },
+        });
+
+        function test() {
+            let Sub = function User() {
+                this.name = 'admin';
+            }
+            // console.log('Sub.prototype', Sub.prototype);
+            Sub();
+            return Sub;
+        }
+
+        let a = test();
+        // 通过构造函数构造实例对象
+        console.log('new a()', new a());
+
+        let b = test();
+        console.log('new b()', new b());
+        console.log('a(User构造函数) === b(User构造函数)', a === b);
+
+        // 回顾 prototype 和 __proto__ 存储原型对象地址的属性
+        // 类型/构造函数的原型对象是唯一的，是所有该类型实例对象共享的
+        // prototype 显式(程序员使用)原型属性，类型/构造函数的属性
+        // __proto__ 隐式(不建议使用)原型属性，实例对象的属性
+        // 构造函数（函数本身又是一种类型）
+        function Vip() {}
+
+        // prototype 获取原型对象
+        let x = Vip.prototype;
+        // __proto__ 获取原型对象
+        let y = new Vip().__proto__;
+        console.log('x(Vip.prototype) === y(new Vip().__proto__)', x === y);
+
+        // 为类型/构造函数的原型对象扩展属性，类似为类型扩展静态变量
+        x.counter = 1000;
+        console.log('x(Vip.prototype).counter', x.counter);
+        console.log('y(new Vip().__proto__.counter', y.counter);
+    </script>
+</body>
+</html>

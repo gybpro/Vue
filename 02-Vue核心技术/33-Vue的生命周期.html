@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue的生命周期</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        Vue的生命周期提供了8个钩子/时机函数
+            1.beforeCreate()：数据代理创建前
+                此时Vue实例已创建，但还无法访问data和method等属性，只初始化了事件对象和生命周期函数
+            2.created()：数据代理创建后
+                此时数据代理已创建，可以访问修改属性了，但Vue实例的渲染函数/模板未构建，即虚拟DOM未构建
+                构建虚拟DOM：将template配置项编译为渲染函数，将el的outerHTML编译为渲染模板
+            3.beforeMount()：Vue实例挂载前
+                此时渲染函数及模板均编译完成，虚拟DOM构建完成，但真实DOM还未挂载
+            4.mounted()：Vue实例挂载后
+                此时Vue实例已将虚拟DOM经过diff算法挂载渲染到页面上，变为真实DOM
+            5.beforeUpdate()：DOM渲染更新前
+                此时是在Vue监听/代理的数据发生变化之后，虚拟DOM更新渲染之前
+            6.updated()：DOM渲染更新后
+                此时是在虚拟DOM更新并渲染到真实DOM之后
+            7.beforeDestroy()：
+            8.destroyed()：
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h3>计数器：{{counter}}</h3>
+        <h3 v-text="counter"></h3>
+        <button @click="add">点我加1</button>
+        <button @click="destroy">点我销毁</button>
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                msg : 'Vue生命周期',
+                counter : 1
+            },
+            methods: {
+                add(){
+                    console.log('add....')
+                    this.counter++
+                },
+                destroy(){
+                    // 销毁vm
+                    this.$destroy()
+                },
+                /* m(){
+                    console.log('m....')
+                } */
+            },
+            watch : {
+                counter(){
+                    console.log('counter被监视一次！')
+                }
+            },
+            /*
+            1.初始阶段
+                el有，template也有，最终编译template模板语句。
+                el有，template没有，最终编译el模板语句。
+                el没有的时候，需要手动调用 vm.$mount(el) 进行手动挂载，然后流程才能继续。此时如果template有，最终编译template模板语句。
+                el没有的时候，需要手动调用 vm.$mount(el) 进行手动挂载，然后流程才能继续。此时如果没有template，最终编译el模板语句。
+
+                结论：
+                    流程要想继续：el必须存在。
+                    el和template同时存在，优先选择template。如果没有template，才会选择el。
+            */
+            beforeCreate() {
+                // 创建前，指的是：数据代理创建前。
+                // 此时还无法访问data当中的数据。包括methods也是无法访问的。
+                console.log('beforeCreate', this.counter)
+                // 调用methods报错了，不存在。
+                //this.m()
+            },
+            created() {
+                // 创建后
+                // 创建后表示数据代理创建完毕，可以访问data中的数据了。
+                console.log('created', this.counter)
+                // 可以访问methods了。
+                //this.m()
+            },
+            // 2.挂载阶段
+            beforeMount() {
+                // 挂载前
+                console.log('beforeMount')
+            },
+            mounted() {
+                // 挂载后
+                console.log('mounted')
+                console.log(this.$el)
+                console.log(this.$el instanceof HTMLElement)
+            },
+            // 3.更新阶段
+            beforeUpdate() {
+                // 更新前
+                console.log('beforeUpdate')
+            },
+            updated() {
+                // 更新后
+                console.log('updated')
+            },
+            // 4.销毁阶段
+            beforeDestroy() {
+                // 销毁前
+                console.log('beforeDestroy')
+                console.log(this)
+                this.counter = 1000
+            },
+            destroyed() {
+                // 销毁后
+                console.log('destroyed')
+                console.log(this)
+            },
+        })
+    </script>
+</body>
+</html>

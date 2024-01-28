@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单文件组件</title>
+    <script src="../../js/vue.js"></script>
+</head>
+<body>
+    <!--
+     单文件组件是.vue文件，由三个部分组成：
+        结构HTML(template)、样式CSS(style)、交互JS(script)
+     单文件组件需要通过脚手架实现
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '单文件组件'
+            },
+        });
+    </script>
+</body>
+</html>

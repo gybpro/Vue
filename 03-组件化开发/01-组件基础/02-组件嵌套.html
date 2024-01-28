@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件嵌套</title>
+    <script src="../../js/vue.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        const b2 = {
+            template: `
+                <div>
+                    <span>B2组件</span>
+                </div>
+            `,
+            components: {}
+        };
+
+        const b1 = {
+            template: `
+                <div>
+                    <h3>B1组件</h3>
+                    <b2></b2>
+                </div>
+            `,
+            components: { b2 }
+        };
+
+        const c2 = {
+            template: `
+                <div>
+                    <span>C2组件</span>
+                </div>
+            `,
+            components: {}
+        };
+
+        const c1 = {
+            template: `
+                <div>
+                    <h3>C1组件</h3>
+                    <c2></c2>
+                </div>
+            `,
+            components: { c2 }
+        };
+
+        const a1 = {
+            template: `
+                <div>
+                    <h1>A1组件</h1>
+                    <b1></b1>
+                    <c1></c1>
+                </div>
+            `,
+            components: { b1, c1 }
+        };
+
+        const vm = new Vue({
+            el: '#app',
+            template: `
+                <a1></a1>
+            `,
+            // 注册a组件
+            components: { a1 }
+        });
+    </script>
+</body>
+</html>

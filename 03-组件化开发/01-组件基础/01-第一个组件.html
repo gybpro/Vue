@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第一个组件</title>
+    <script src="../../js/vue.js"></script>
+</head>
+<body>
+    <!--
+    组件的使用：
+        1.创建组件
+            Vue.extend({配置项，和new Vue()的配置项几乎相同，略有差别})
+            区别：
+                1.创建Vue组件的时候，不能使用el配置项(不固定挂载才能复用)，但是需要template配置项(组件要有自己的结构HTML)
+                2.组件配置项中的data必须是一个方法，不能是一个对象(使用多个组件类似使用多个对象，使用方法复用才能多个组件对象互不影响，
+                使用对象则类似静态变量，多个组件对象使用同一个类上的全局静态变量，会相互影响，Vue底层拒绝了这种行为)
+        2.注册组件
+            局部注册：
+                配置项中使用components配置项注册组件，语法格式：
+                    components: {
+                        组件名: 组件对象
+                    }
+            全局注册：
+                Vue.component('组件名', 组件对象)
+        3.使用组件
+        注意：
+            1.在Vue当中可以使用自闭合标签，但前提是必须在脚手架环境使用，否则只用第一个标签有效
+            2.Vue.extend()可省略，Vue底层会自动调用
+            3.组件名：
+                推荐kebab-case命名（串式命名，如user-login）
+                或CamelCase命名（驼峰命名，如UserLogin），但是驼峰命名只允许在脚手架环境使用
+                不要使用HTML内置的标签名作为组件名
+            4.组件中的name配置项，设置的是Vue开发者工具中的名字，不是组件的名字
+     -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h3>app</h3>
+        <!-- 3.使用组件 -->
+        <first-component></first-component>
+        <first-component></first-component>
+    </div>
+
+    <div id="app2">
+        <h3>app2</h3>
+        <first-component></first-component>
+    </div>
+
+    <script>
+        // 1.创建组件(组件有自己的 结构HTML 样式CSS 交互JS)
+        // Vue.extend()可省略，Vue会自动调用
+        // const firstComponent = Vue.extend({
+        const firstComponent = {
+            template: `
+                <div>
+                    <ul>
+                        <li v-for="user of users" :key="user.id">
+                            {{ user.id }}, {{ user.name }}
+                        </li>
+                    </ul>
+                    <button @click="userReverse">翻转users</button>
+                </div>
+            `,
+            data() {
+                return {
+                    users: [
+                        { id: 1, name: '张三' },
+                        { id: 2, name: '李四' },
+                        { id: 3, name: '王五' }
+                    ],
+                }
+            },
+            methods: {
+                userReverse() {
+                    this.users = this.users.reverse();
+                }
+            }
+            // });
+        };
+
+        // 全局注册
+        Vue.component('first-component', firstComponent);
+
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: '第一个组件'
+            },
+            // 2.注册组件，局部注册
+            components: {
+                firstComponent,
+            },
+        });
+
+        const vm2 = new Vue({
+            el: "#app2"
+        });
+    </script>
+</body>
+</html>
