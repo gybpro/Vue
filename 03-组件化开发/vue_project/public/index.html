@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <!-- 让IE浏览器启用最高渲染标准。IE8不支持Vue -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 开启移动端虚拟窗口（理想视窗/适配移动端） -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- 设置页签图标 -->
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <!-- 设置标题（htmlWebpackPlugin.options.title是package.json的name） -->
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body>
+    <!-- 当浏览器不支持JS语言时，显示如下提示信息 -->
+    <noscript>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+            Please enable it to continue.</strong>
+    </noscript>
+    <!-- 容器 -->
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+</body>
+
+</html>
+
+<!--
+    在index.html文件中：
+        没有引入vue.js，也没有引入main.js。
+        在运行后，Vue脚手架会自动导入，不需要手动引入
+        因此，main.js文件的路径(名字、位置)不能随意修改
+        在main.js中import Vue from 'vue'，就是引入vue.js文件的
+ -->
