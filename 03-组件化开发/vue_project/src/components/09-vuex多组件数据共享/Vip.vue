@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
     name: 'VipName',
@@ -30,11 +30,16 @@ export default {
         ...mapGetters([ 'reversedName' ])
     },
     methods: {
-        saveVip() {
+        /* saveVip() {
             // dispatch函数调用
             // this.$store.dispatch('saveVip', { id: Date.now(), name: this.vipName })
             this.$store.commit('SAVE_VIP', { id: Date.now(), name: this.vipName })
-        }
+        } */
+        // ...mapActions([ 'saveVip' ]),
+        // 注意：mapMutations(['SAVE_VIP'])，数组形式引入函数名为SAVE_USER
+        // ...mapMutations(['SAVE_VIP'])
+        // 对象形式，可以自定义方法名
+        ...mapMutations({ saveVip: 'SAVE_VIP' })
     },
 }
 </script>

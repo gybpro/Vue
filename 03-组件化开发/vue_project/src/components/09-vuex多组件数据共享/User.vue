@@ -17,7 +17,7 @@
 
 <script>
 // vuex插件提供的内置mapState和mapGetters对象（负责state和getters对象映射工作的对象）
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
     name: 'UserName',
@@ -52,12 +52,17 @@ export default {
         ...mapGetters([ 'reversedName' ])
     },
     methods: {
-        saveUser() {
+        /* saveUser() {
             // dispatch函数调用
             // this.$store.dispatch('saveUser', { id: Date.now(), name: this.username })
             // 如果action中的逻辑非常简单，可以不经过action，直接通过commit走mutation
             this.$store.commit('SAVE_USER', { id: Date.now(), name: this.username })
-        }
+        } */
+        // ...mapActions([ 'saveUser' ]),
+        // 注意：mapMutations(['SAVE_USER'])，数组形式引入函数名为SAVE_USER
+        // ...mapMutations(['SAVE_USER'])
+        // 对象形式，可以自定义方法名
+        ...mapMutations({ saveUser: 'SAVE_USER' })
     },
 }
 </script>
